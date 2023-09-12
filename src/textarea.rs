@@ -8,7 +8,7 @@ use crate::search::Search;
 use crate::tui::layout::Alignment;
 use crate::tui::style::{Modifier, Style};
 use crate::tui::text::Spans;
-use crate::tui::widgets::{Block, Widget};
+use crate::tui::widgets::Block;
 use crate::util::spaces;
 use crate::widget::{Renderer, Viewport};
 use crate::word::{find_word_end_forward, find_word_start_backward};
@@ -1019,7 +1019,7 @@ impl<'a> TextArea<'a> {
     ///     // ...
     /// }
     /// ```
-    pub fn widget(&'a self) -> impl Widget + 'a {
+    pub fn widget(&'a self) -> Renderer<'a> {
         Renderer::new(self)
     }
 
@@ -1609,14 +1609,14 @@ mod tests {
         use crate::tui::layout::Rect;
         use crate::tui::widgets::Widget;
 
-        let mut textarea: TextArea = (0..20).into_iter().map(|i| i.to_string()).collect();
+        let mut textarea: TextArea = (0..20).map(|i| i.to_string()).collect();
         let r = Rect {
             x: 0,
             y: 0,
             width: 24,
             height: 8,
         };
-        let mut b = Buffer::empty(r.clone());
+        let mut b = Buffer::empty(r);
         textarea.widget().render(r, &mut b);
 
         textarea.scroll((15, 0));
